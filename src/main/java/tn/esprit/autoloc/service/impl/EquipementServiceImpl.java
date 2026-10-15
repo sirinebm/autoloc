@@ -1,15 +1,41 @@
 package tn.esprit.autoloc.service.impl;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import tn.esprit.autoloc.domain.Equipement;
 import tn.esprit.autoloc.repository.EquipementRepository;
 import tn.esprit.autoloc.service.IEquipementService;
 
+import java.util.List;
+
 @Service
+@AllArgsConstructor
 public class EquipementServiceImpl implements IEquipementService {
 
     private final EquipementRepository equipementRepository;
 
-    public EquipementServiceImpl(EquipementRepository equipementRepository) {
-        this.equipementRepository = equipementRepository;
+    @Override
+    public Equipement ajouterEquipement(Equipement equipement) {
+        return equipementRepository.save(equipement);
+    }
+
+    @Override
+    public Equipement modifierEquipement(Equipement equipement) {
+        return equipementRepository.save(equipement);
+    }
+
+    @Override
+    public Equipement getEquipement(long id) {
+        return equipementRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void supprimerEquipementById(Long id) {
+        equipementRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Equipement> getAllEquipements() {
+        return equipementRepository.findAll();
     }
 }
