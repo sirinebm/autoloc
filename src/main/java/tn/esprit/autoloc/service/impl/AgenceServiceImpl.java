@@ -1,9 +1,12 @@
 package tn.esprit.autoloc.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import tn.esprit.autoloc.domain.Agence;
 import tn.esprit.autoloc.repository.AgenceRepository;
+import tn.esprit.autoloc.repository.VehiculeRepository;
 import tn.esprit.autoloc.service.IAgenceService;
 
 import java.util.List;
@@ -13,6 +16,7 @@ import java.util.List;
 public class AgenceServiceImpl implements IAgenceService {
 
     private final AgenceRepository agenceRepository;
+    private final VehiculeRepository vehiculeRepository;
 
     @Override
     public Agence ajouterAgence(Agence agence) {
@@ -31,6 +35,12 @@ public class AgenceServiceImpl implements IAgenceService {
 
     @Override
     public void supprimerAgenceById(Long id) {
+        if (vehiculeRepository.existsByAgence_IdAgence(id)) {
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Impossible de supprimer l'agence " + id + " : des véhicules sont encore rattachés."
+            );
+        }
         agenceRepository.deleteById(id);
     }
 
