@@ -59,4 +59,10 @@ public class AgenceController {
         agenceService.supprimerAgenceById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/avec-vehicules")
+    @Operation(summary = "Ajouter une agence avec deux véhicules")
+    public ResponseEntity<Agence> ajouterAgenceEtAffecterVehicules(@RequestBody Agence agence) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(agenceService.ajouterAgenceEtAffecterVehicules(agence));
+    }
 }

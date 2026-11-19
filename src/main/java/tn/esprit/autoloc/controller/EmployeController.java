@@ -1,6 +1,9 @@
 package tn.esprit.autoloc.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.autoloc.domain.Employe;
 import tn.esprit.autoloc.service.IEmployeService;
@@ -9,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/employes")
+@Tag(name = "Gestion des Employes")
 @AllArgsConstructor
 public class EmployeController {
 
@@ -37,5 +41,17 @@ public class EmployeController {
     @GetMapping
     public List<Employe> getAllEmployes() {
         return employeService.getAllEmployes();
+    }
+
+    @PutMapping("/{idEmploye}/affecter-agence/{idAgence}")
+    @Operation(summary = "Affecter un employé à une agence")
+    public ResponseEntity<Employe> affecterEmployeAgence(@PathVariable Long idEmploye, @PathVariable Long idAgence) {
+        return ResponseEntity.ok(employeService.affecterEmploye(idEmploye, idAgence));
+    }
+
+    @PutMapping("/{idEmploye}/desaffecter-agence")
+    @Operation(summary = "Désaffecter un employé de son agence")
+    public ResponseEntity<Employe> desaffecterEmployeAgence(@PathVariable Long idEmploye) {
+        return ResponseEntity.ok(employeService.desaffecterEmploye(idEmploye));
     }
 }

@@ -5,8 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import tn.esprit.autoloc.domain.Agence;
+import tn.esprit.autoloc.domain.Equipement;
 import tn.esprit.autoloc.domain.Vehicule;
 import tn.esprit.autoloc.repository.AgenceRepository;
+import tn.esprit.autoloc.repository.EquipementRepository;
 import tn.esprit.autoloc.repository.ReservationRepository;
 import tn.esprit.autoloc.repository.VehiculeRepository;
 import tn.esprit.autoloc.service.IVehiculeService;
@@ -20,6 +22,7 @@ public class VehiculeServiceImpl implements IVehiculeService {
     private final VehiculeRepository vehiculeRepository;
     private final AgenceRepository agenceRepository;
     private final ReservationRepository reservationRepository;
+    private final EquipementRepository equipementRepository;
 
     @Override
     public Vehicule ajouterVehicule(Vehicule vehicule) {
@@ -52,6 +55,36 @@ public class VehiculeServiceImpl implements IVehiculeService {
     @Override
     public List<Vehicule> getAllVehicules() {
         return vehiculeRepository.findAll();
+    }
+
+    @Override
+    public Vehicule affecterEquipement(Long idVehicule, Long idEquipement) {
+        Vehicule vehicule = vehiculeRepository.findById(idVehicule)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable avec l'id " + idVehicule));
+        Equipement equipement = equipementRepository.findById(idEquipement)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Équipement introuvable avec l'id " + idEquipement));
+
+        vehicule.getEquipements().add(equipement);
+        if (equipement.getVehicules() != null) {
+            equipement.getVehicules().add(vehicule);
+        }
+
+        return vehiculeRepository.save(vehicule);
+    }
+
+    @Override
+    public Vehicule desaffecterEquipement(Long idVehicule, Long idEquipement) {
+        Vehicule vehicule = vehiculeRepository.findById(idVehicule)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable avec l'id " + idVehicule));
+        Equipement equipement = equipementRepository.findById(idEquipement)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Équipement introuvable avec l'id " + idEquipement));
+
+        vehicule.getEquipements().remove(equipement);
+        if (equipement.getVehicules() != null) {
+            equipement.getVehicules().remove(vehicule);
+        }
+
+        return vehiculeRepository.save(vehicule);
     }
 
     private Agence recupererAgenceExistante(Vehicule vehicule) {

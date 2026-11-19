@@ -59,4 +59,16 @@ public class VehiculeController {
         vehiculeService.supprimerVehiculeById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{idVehicule}/equipements/{idEquipement}/affecter")
+    @Operation(summary = "Affecter un équipement à un véhicule")
+    public ResponseEntity<Vehicule> affecterEquipement(@PathVariable Long idVehicule, @PathVariable Long idEquipement) {
+        return ResponseEntity.ok(vehiculeService.affecterEquipement(idVehicule, idEquipement));
+    }
+
+    @PutMapping("/{idVehicule}/equipements/{idEquipement}/desaffecter")
+    @Operation(summary = "Désaffecter un équipement d’un véhicule")
+    public ResponseEntity<Vehicule> desaffecterEquipement(@PathVariable Long idVehicule, @PathVariable Long idEquipement) {
+        return ResponseEntity.ok(vehiculeService.desaffecterEquipement(idVehicule, idEquipement));
+    }
 }

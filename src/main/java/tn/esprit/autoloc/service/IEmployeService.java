@@ -10,4 +10,12 @@ public interface IEmployeService {
     Employe getEmploye(long id);
     void supprimerEmployeById(Long id);
     List<Employe> getAllEmployes();
+
+    Employe affecterEmployeAgence(Long idEmploye, Long idAgence);
+
+    Employe desaffecterEmployeAgence(Long idEmploye);
+
+    Employe desaffecterEmploye(Long idEmploye);
+
+    Employe affecterEmploye(Long idEmploye, Long idAgence);
 }
